@@ -1,0 +1,311 @@
+\begin{multicols}{3}[]
+
+\subsection{define}
+\begin{lstlisting}
+(define (reply2 s)
+  (if (and (string? s)
+           (>= (string-length s) 5)
+           (equal? "hello" (substring s 0 5)))
+      "hi"
+      "huh?"))
+
+(reply2 "hello")
+(reply2 "hel")
+(reply2 1234)
+\end{lstlisting}
+
+\subsection{three-positive}
+\begin{lstlisting}
+(define (three-positive? a b c)
+  (and (> a 0)
+	   (> b 0)
+	   (> c 0)))
+\end{lstlisting}
+
+\subsection{has-negative}
+\begin{lstlisting}
+(define (has-negative? a b c)
+  (or (< a 0)
+	  (< b 0)
+	  (< c 0)))
+\end{lstlisting}
+
+\subsection{lambda}%
+\label{sub:lambda}
+\begin{lstlisting}
+(define n 10)
+(define small? (lambda (x) (<= x n)))
+(define sqr (lambda (x) (* x x)))
+(small? (sqr 10))
+(small? (sqr 3))
+\end{lstlisting}
+
+\subsection{my-pow}%
+\label{sub:my_pow}
+\begin{lstlisting}
+(define my-pow
+  (lambda (x pow)
+	(if (< pow 0)
+	  (/ 1 (my-pow x (* -1 pow)))
+	  (if (= pow 0)
+	    1
+	    (* x (my-pow x (- pow 1)))))))
+\end{lstlisting}
+
+\subsection{my-fact}%
+\label{sub:my_fact}
+\begin{lstlisting}
+(define my-fact
+  (lambda (n)
+    (if (= 0 n)
+      1
+      (* n (my-fact (- n 1))))))
+\end{lstlisting}
+
+\subsection{my-fact 3}%
+\label{sub:my_fact_2}
+\begin{lstlisting}
+(define f
+  (lambda (n prod)
+    (if (= 0 n)
+      prod
+      (f (- n 1) (* n prod)))))
+
+(define (fakt n)
+  (define f
+    (lambda (n prod)
+      (if (= 0 n)
+        prod
+        (f (- n 1) (* n prod)))))
+  (f n 1))
+(trace f)
+(f 6 1)
+\end{lstlisting}
+
+\subsection{farokrekurzív my-fib}%
+\label{sub:farokrekurziv_my_fib}
+\begin{lstlisting}
+(define (fib n)
+  (fib-iter 1 0 n))
+
+(define (fib-iter a b count)
+  (if (= count 0)
+    b
+    (fib-iter (+ a b) a (- count 1))))
+\end{lstlisting}
+
+\subsection{let}%
+\label{sub:let}
+\begin{lstlisting}
+; lokalis kornyezetek
+
+(let ((i 2) (j 3))
+  (+ i j))
+
+(let ((+ *) (* +)) ; szimbolumok ertelmenek felcserelese
+  (+ (* 3 4) (* 2 5)))
+
+(let ((+ *))
+  (let((* +))
+      (+ (* 3 4) (* 2 5))))
+
+(let* ((i 2) (j (+ 1 2)))
+  (+ i j))
+
+; Egy (let ((pl v1) (p2 v2)) ...) expr1 expr2...
+; egyenerteku a kovetkezovel:
+; ((lambda (p1 p2 ...) expr1 expr2...) v1 v2 ...)
+\end{lstlisting}
+
+
+\subsection{quadratic}%
+\label{sub:quadratic}
+\begin{lstlisting}
+(define (quadratic a b c)
+  (let ((d ((- (* b b) (* 4 (* a c))))))
+    (if (> d 0)
+      (print "nincs megold"))))
+\end{lstlisting}
+
+
+\end{multicols}\newpage
+\begin{multicols}{2}[]
+
+\subsection{collatz}%
+\label{sub:collatz}
+\begin{lstlisting}
+(define (collatz a l)
+  (if (= a 1)
+      l
+      (if (= (modulo a 2) 0)
+          (collatz (/ a 2) (+ l 1))
+          (collatz (+ (* a 3) 1) (+ l 1))
+          )
+      )
+  )
+\end{lstlisting}\vfill\null
+
+
+\subsection{collatz2}%
+\label{sub:collatz2}
+\begin{lstlisting}
+(define collatz2 (lambda (a l)
+      (if (= a 1)
+          l
+          (if (= (modulo a 2) 0)
+              (collatz2 (/ a 2) (+ l 1))
+              (collatz2 (+ (* a 3) 1) (+ l 1))
+              )
+          )
+      )
+  )
+\end{lstlisting}\vfill\null
+
+\subsection{collatz3}%
+\label{sub:collatz3}
+\begin{lstlisting}
+(letrec ([collatz3 (lambda (a l)
+      (if (= a 1)
+          l
+          (if (= (modulo a 2) 0)
+              (collatz3 (/ a 2) (+ l 1))
+              (collatz3 (+ (* a 3) 1) (+ l 1))
+              )
+          )
+      )])
+(collatz3 23 1)
+)
+\end{lstlisting}\vfill\null
+
+\begin{minipage}{\linewidth}
+\subsection{collatz4}%
+\label{sub:collatz4}
+\begin{lstlisting}
+(define (col a l) (let collatz4 ((a a)(l l))
+      (cond
+        [(= a 1) l]
+        [(= (modulo a 2) 0) (collatz4 (/ a 2) (+ l 1))]
+        [(= (modulo a 2) 1) (collatz4 (+ (* a 3) 1) (+ l 1))]
+        )
+
+))
+\end{lstlisting}
+\end{minipage}
+
+
+\subsection{sum}%
+\label{sub:sum}
+\begin{lstlisting}
+(define sum (lambda (a b)
+   (if (< a b)
+     (+ a (sum (+ a 1) b)) a)))
+\end{lstlisting}
+\end{multicols}
+
+\subsection{lcs}%
+\label{sub:lcs}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}
+(define (lcs str1 str2)
+  (define (lcs-inner lst1 lst2 l)
+    (cond
+      [(or (null? lst1) (null? lst2)) l]
+      [(eq? (car lst1) (car lst2)) (lcs-inner (cdr lst1) (cdr lst2) (add1 l))]
+      [else (max (lcs-inner (cdr lst1) lst2 l) (lcs-inner lst1 (cdr lst2) l))]
+      )
+    )
+  (lcs-inner (string->list str1) (string->list str2) 0)
+  )
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\subsection{lcs-hash}%
+\label{sub:lcs_hash}
+
+\begin{lstlisting}
+(define (lcs-hash str1 str2)
+  (define ht (make-hash))
+  (define (lcs-inner lst1 lst2)
+    (define hash-key (list lst1 lst2))
+    (cond
+      [(hash-ref ht hash-key #f) (hash-ref ht (list lst1 lst2))]
+      [(or (null? lst1) (null? lst2)) 0]
+      [(eq? (car lst1) (car lst2))
+          (hash-set! ht hash-key (+ 1 (lcs-inner (cdr lst1) (cdr lst2)))) (hash-ref ht (list lst1 lst2))]
+      [else
+          (hash-set! ht hash-key
+              (max (lcs-inner (cdr lst1) lst2) (lcs-inner lst1 (cdr lst2)))) (hash-ref ht (list lst1 lst2))]
+      )
+    )
+  (lcs-inner (string->list str1) (string->list str2))
+  )
+\end{lstlisting}
+\end{minipage}
+
+\newpage
+
+\subsection{my-sort}%
+\label{sub:my_sort}
+
+\begin{lstlisting}
+(define (my-sort lst)
+  (define (list-min lst)
+    (define (find-min lst min)
+      (cond
+        [(null? lst) min]
+        [else (if (< (car lst) min)
+                  (find-min (cdr lst) (car lst))
+                  (find-min (cdr lst) min)
+                  )]
+        )
+      )
+    (find-min lst (car lst))
+  )
+  (define sorted '())
+  (define (inside-sort lst)
+    (cond
+      [(null? lst) sorted]
+      [else (define min-val (list-min lst))
+            (set! sorted (append sorted (list min-val)))
+            (inside-sort (remove min-val lst))
+            ]
+      )
+    )
+  (if (list? lst)
+      (inside-sort lst)
+      (error "Expected argument type: List, Given: Whatever you gave it")
+      )
+  )
+(my-sort '(1 4 2 -2 50 3000 -200 60 50))
+\end{lstlisting}
+
+\begin{multicols}{2}[]
+\subsection{myremove}%
+\label{sub:myremove}
+\begin{lstlisting}
+;elso elofordulast torli
+(define (myremove v lst)
+  (cond
+    [(null? lst) (append null null)]
+    [(equal? v (car lst)) (append null (cdr lst))]
+    [else (append (list (car lst)) (myremove v (cdr lst)))]
+    )
+  )
+\end{lstlisting}
+
+\subsection{myremove2}%
+\label{sub:myremove2}
+\begin{lstlisting}
+;osszes elofordulast torli
+(define (myremove2 v lst)
+  (cond
+    [(null? lst) (append null null)]
+    [(equal? v (car lst)) (append null (myremove2 v (cdr lst)))]
+    [else (append (list (car lst)) (myremove2 v (cdr lst)))]
+    )
+  )
+\end{lstlisting}
+\end{multicols}
+

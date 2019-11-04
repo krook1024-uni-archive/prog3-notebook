@@ -1,0 +1,69 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[magyar]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=1.2cm, landscape]{geometry}
+\usepackage{listings}
+\usepackage{float}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor=black
+}
+
+\usepackage{multicol}
+\setlength{\columnseprule}{0.4pt}
+\setlength{\columnsep}{3em}
+
+
+\usepackage{xcolor}
+\definecolor{Blue}{rgb}{0,0,0.8}
+\usepackage[explicit]{titlesec}
+\titleformat{\subsection}
+   {\normalfont\large\bfseries}% format
+   {}% label
+   {0pt}% sep
+   {\titlerule\newline{\thetitle. }#1}% before code
+   []% after code
+\titlespacing{\subsection}
+   {0pt}% left
+   {0pt}% before sep
+   {\baselineskip}% after sep
+
+\pdfsuppresswarningpagegroup=1
+\setlength{\parindent}{0em}
+
+\begin{document}
+\title{Magas szintű programozási nyelvek 3}
+\author{Molnár Antal Albert}
+
+\lstset{
+    basicstyle=\footnotesize,
+    float,
+    floatplacement=H
+}
+
+\topskip0pt
+
+\vspace*{\fill}
+\begin{multicols}{2}[]
+\maketitle\vfill\null
+\columnbreak
+\tableofcontents
+\newpage
+\end{multicols}
+\vspace*{\fill}
+
+\section{I. zárthelyi dolgozat}%
+\label{sec:i_zh}
+\input{1_zh.tex}
+
+\newpage
+
+\section{II. zárthelyi dolgozat}%
+\label{sec:ii_zarthelyi_dolgozat}
+%TODO
+
+\end{document}
